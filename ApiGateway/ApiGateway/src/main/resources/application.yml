@@ -1,0 +1,48 @@
+server:
+  port: 8005
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: USER-SERVICE
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/auth/**,/users/**,/main/users/**
+        - id: POST-SERVICE
+          uri: lb://POST-SERVICE
+          predicates:
+            - Path=/posts/**,/main/posts/**
+        - id: NOTIFICATION-SERVICE
+          uri: lb://NOTIFICATION-SERVICE
+          predicates:
+            - Path=/main/notifications/**
+        - id: STORY-SERVICE
+          uri: lb://STORY-SERVICE
+          predicates:
+            - Path=/main/story/**
+        - id: POSTCOMMENT-SERVICE
+          uri: lb://POSTCOMMENT-SERVICE
+          predicates:
+            - Path=/main/comments/**
+        - id: SAVEDPOST-SERVICE
+          uri: lb://SAVEDPOST-SERVICE
+          predicates:
+            - Path=/main/savedposts/**
+        - id: MESSAGE-SERVICE
+          uri: lb://MESSAGE-SERVICE
+          predicates:
+            - Path=/main/messages/**
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
